@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Manajemen Karyawan</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f1f1f1; /* Light background color */
+        }
+
+        .admin-info {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-color: #1a334c;
+            color: white;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4.8rem; /* Fixed height for admin info */
+            z-index: 1000;
+        }
+
+        .admin-profile-box {
+            display: flex; /* Use Flexbox for alignment */
+            align-items: center; /* Center items vertically */
+            background-color: #1a334c; /* Same background as the sidebar */
+            color: white; /* Text color */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Padding around the content */
+            cursor: pointer; /* Change cursor to pointer */
+            transition: background-color 0.3s; /* Smooth background transition */
+        }
+
+        .admin-profile-box:hover {
+            background-color: #007bff; /* Change background on hover */
+        }
+
+        .admin-profile-box img {
+            width: 50px; /* Profile image size */
+            height: 50px; /* Profile image size */
+            border-radius: 50%; /* Make the image circular */
+            margin-left: 10px; /* Space between text and image */
+        }
+
+        .university-name {
+            position: absolute; /* Position it at the top left */
+            top: 25px; /* Align it vertically */
+            left: 290px; /* Align it horizontally */
+            color: white; /* Text color */
+            font-weight: bolder; /* Make it bold */
+            font-size: 1.2em; /* Adjust size as needed */
+            margin: 0; /* Remove default margin */
+        }
+
+        .dashboard {
+            margin-top: 3rem;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem; /* Larger title font size */
+            font-weight: 700; /* Bold */
+            color: black; /* Black color for better contrast */
+            text-align: center; /* Center the title */
+            margin-bottom: 10px; /* Space below the title */
+        }
+
+        .dashboard-subtitle {
+            padding-top: 0.5rem;
+            font-size: 1.5rem; /* Subtitle font size */
+            text-align: center; /* Center the subtitle */
+            margin-bottom: 40px; /* Space below the subtitle */
+        }
+
+        .dashboard-card {
+            border-radius: 15px; /* Rounded corners for cards */
+            transition: transform 0.3s, box-shadow 0.3s; /* Animation for hover effect */
+            height: 200px; /* Fixed height for all cards */
+        }
+
+        .card-body {
+            display: flex; /* Use Flexbox */
+            flex-direction: column; /* Align items in a column */
+            justify-content: flex-start; /* Align items at the start (top) */
+            padding: 15px; /* Add some padding */
+        }
+
+        .card-title {
+            padding-top: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px; /* Space between title and text */
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+        }
+
+        .card-text {
+            text-align: center;
+            font-size: 2rem; /* Adjust text size for numbers */
+            font-weight: bold; /* Bold numbers for emphasis */
+        }
+
+        .sidebar {
+            width: 270px;
+            position: fixed;
+            top: 0; /* Start from the top */
+            left: 0;
+            height: 100vh;
+            background-color: #1a334c; /* Darker background color for the sidebar */
+            z-index: 1001; /* Higher z-index than admin-info to overlap it */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .company-info {
+            display: flex;
+            flex-direction: column; /* Align items in a column */
+            align-items: center; /* Center the items */
+            padding: 1px 20px; /* Reduced padding for closer alignment */
+            gap: 0.5rem; /* Reduced gap to bring items closer */
+            color: white; /* White color for company info */
+            font-size: 1.2em;
+            margin-bottom: 20px; /* Space below the company info */
+        }
+
+        .company-info img {
+            width: 220px;
+            height: 220px; /* Space below the logo */
+        }
+
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            padding-top: 90px; /* Offset for fixed admin-info */
+        }
+
+        .nav-link {
+            color: rgb(224, 224, 224); /* Change text color to white */
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #007bff;
+            color: white; /* Ensure hover color remains white */
+        }
+
+        h4 {
+            color: #5e9bd8; /* Change color of section headings to white */
+        }
+
+        .nav-link i {
+            color: white; /* Set icon color to white */
+            margin-right: 8px; /* Add some space between the icon and text */
+        }
+
+        /* Custom Scrollbar for Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #1a334c; /* Color of the scrollbar thumb */
+            border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #1a334c; /* Background color of the scrollbar track */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* Hide the sidebar on small screens */
+            }
+
+            .nav-link {
+                color: black; /* Change font color to black on small screens */
+            }
+
+            .content {
+                margin-left: 0; /* Remove margin on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Info at the Top Right -->
+    <div class="admin-info text-end">
+        <h5 class="university-name">AUCKLAND UNIVERSITY</h5> <!-- University name -->
+        <div class="dropdown">
+            <div class="admin-profile-box d-flex align-items-center">
+                <div class="admin-profile-text"> <!-- Text on the left -->
+                    <h6 class="dropdown-header">Administrator</h6>
+                    <p class="dropdown-item-text mb-0">Ilyas Faisal</p>
+                </div>
+                <img src="user.png" alt="Foto Profil Admin" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false"> <!-- Profile Image on the right -->
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- Sidebar with Company Info inside -->
+    <div class="sidebar">
+        <div class="company-info text-center">
+            <img src="Auckland.png" alt="Company Logo"> <!-- Company logo -->
+            <h5 class="mb-0" style="font-weight: normal;">Selamat Datang, Ilyas Faisal</h5> <!-- Welcome text -->
+            <p class="mb-0" style="font-weight: normal; color: white;">admin</p> <!-- Admin text -->
+        </div>
+
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt mt-3"></i> Dashboard
+            </a>
+            <h4 class="mt-4 ms-3">Menu Karyawan</h4>
+            <a class="nav-link" href="#" onclick="showSection('table-section')">
+                <i class="fas fa-users"></i> Data Karyawan
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('jabatan-section')">
+                <i class="fas fa-briefcase"></i> Jabatan
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('divisi-section')">
+                <i class="fas fa-building"></i> Divisi
+            </a>
+            <h4 class="mt-4 ms-3">Menu Absensi</h4>
+            <a class="nav-link" href="#" onclick="showSection('absensi-section')">
+                <i class="fas fa-calendar-check"></i> Absensi
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('izin-section')">
+                <i class="fas fa-calendar-times"></i> Izin
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('lembur-section')">
+                <i class="fas fa-clock"></i> Lembur
+            </a>
+            <h4 class="mt-4 ms-3">Menu Penggajian</h4>
+            <a class="nav-link" href="#" onclick="showSection('slip-gaji-section')">
+                <i class="fas fa-money-bill-wave"></i> Slip Gaji
+            </a>
+            <h4 class="mt-4 ms-3">Menu Laporan</h4>
+            <a class="nav-link" href="#" onclick="showSection('cetak-laporan-section')">
+                <i class="fas fa-file-alt"></i> Cetak Laporan
+            </a>
+            <h4 class="mt-4 ms-3">Menu Admin</h4>
+            <a class="nav-link" onclick="logout('')">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Responsive Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Sistem Informasi Manajemen Karyawan</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <h4 class="nav-link">Menu Karyawan</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('table-section')">
+                            <i class="fas fa-users"></i> Data Karyawan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('jabatan-section')">
+                            <i class="fas fa-briefcase"></i> Jabatan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('divisi-section')">
+                            <i class="fas fa-building"></i> Divisi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <h4 class="nav-link">Menu Absensi</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('absensi-section')">
+                            <i class="fas fa-calendar-check"></i> Absensi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('izin-section')">
+                            <i class="fas fa-calendar-times"></i> Izin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('lembur-section')">
+                            <i class="fas fa-clock"></i> Lembur
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <h4 class="nav-link">Menu Penggajian</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('slip-gaji-section')">
+                            <i class="fas fa-money-bill-wave"></i> Slip Gaji
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <h4 class="nav-link">Menu Laporan</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('cetak-laporan-section')">
+                            <i class="fas fa-file-alt"></i> Cetak Laporan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <h4 class="nav-link">Menu Admin</h4>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="formlogin.html" onclick="logout('')">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="dashboard">
+            <h1 class="dashboard-title">SISTEM INFORMASI MANAJEMEN KARYAWAN</h1>
+            <h2 class="text-secondary dashboard-subtitle">Admin Dashboard</h2>
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card dashboard-card bg-primary text-white mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Jumlah Pegawai</h5>
+                            <p id="employeeCount" class="card-text display-4">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card dashboard-card bg-success text-white mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Absensi Hari Ini</h5>
+                            <p id="todayAttendance" class="card-text display-4">0</p>
+                            <p id="todayDate" style="text-align: center;"></p>
+                        </div>
+                    </div>
+                </div>                
+                <div class="col-md-3">
+                    <div class="card dashboard-card bg-info text-white mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Izin Menunggu Konfirmasi</h5>
+                            <p id="pendingLeaves" class="card-text display-4">0</p>
+                        </div>
+                    </div>
+                </div>                
+                <div class="col-md-3">
+                <div class="card dashboard-card bg-warning text-dark mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Lembur Menunggu Konfirmasi</h5>
+                        <p id="pendingOvertime" class="card-text display-4">0</p>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        
+        
+        
+
+        <!-- Table Section for Employee Data -->
+        <div id="table-section" class="table-section" style="display: none;">
+            <h3>Data Karyawan</h3>
+            
+            <div class="d-flex flex-column align-items-end mb-3">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">+ Tambah Karyawan</button>
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari Karyawan..." onkeyup="searchEmployees()" style="width: 250px;">
+            </div>
+            
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Alamat</th>
+                        <th>Jabatan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        
+
+        <!-- Jabatan Section -->
+        <div id="jabatan-section" class="jabatan-section" style="display: none;">
+            <h3>Data Jabatan</h3>
+            
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addJabatanModal">+ Tambah Jabatan</button>
+            </div>
+            
+            <div class="d-flex justify-content-end mb-3">
+                <input type="text" id="jabatanSearchInput" class="form-control" placeholder="Cari Jabatan..." onkeyup="searchJabatan()" style="width: 250px;">
+            </div>
+            
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Jabatan</th>
+                        <th>Jabatan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="jabatanTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        
+
+        <!-- Divisi Section -->
+        <div id="divisi-section" class="divisi-section" style="display: none;">
+            <h3>Data Divisi</h3>
+            
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addDivisiModal">+ Tambah Divisi</button>
+            </div>
+            
+            <div class="d-flex justify-content-end mb-3">
+                <input type="text" id="divisiSearchInput" class="form-control" placeholder="Cari Divisi..." onkeyup="searchDivisi()" style="width: 250px;">
+            </div>
+            
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Divisi</th>
+                        <th>Nama Divisi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="divisiTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        
+        
+
+        <!-- Absensi Section -->
+        <div id="absensi-section" class="absensi-section" style="display: none;">
+            <h3>Daftar Hadir Karyawan</h3>
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addAbsensiModal">+ Tambah Absensi</button>
+            <table class="table table-bordered" id="absensiTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Karyawan</th>
+                        <th>Tanggal</th>
+                        <th>Lokasi Absen</th>
+                        <th>Jam Masuk</th>
+                        <th>Jam Keluar</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        
+
+        <!-- Izin Section -->
+        <div id="izin-section" class="izin-section" style="display: none;">
+            <h3>Data Izin Karyawan</h3>
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addIzinModal">+ Tambah Izin</button>
+            <table class="table table-bordered" id="izinTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Karyawan</th>
+                        <th>Nama Karyawan</th>
+                        <th>Tanggal Izin</th>
+                        <th>Alasan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="izinTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Lembur Section -->
+        <div id="lembur-section" class="lembur-section" style="display: none;">
+            <h3>Data Lembur Karyawan</h3>
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addLemburModal">+ Tambah Lembur</button>
+            <table class="table table-bordered" id="lemburTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Karyawan</th>
+                        <th>Nama Karyawan</th>
+                        <th>Tanggal Lembur</th>
+                        <th>Jam Mulai</th>
+                        <th>Jam Selesai</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="lemburTableBody">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slip Gaji Section -->
+        <div id="slip-gaji-section" class="slip-gaji-section" style="display: none;">
+            <h3>Slip Gaji Karyawan</h3>
+            <table class="table table-bordered" id="slipGajiTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Karyawan</th>
+                        <th>Nama Karyawan</th>
+                        <th>Bulan</th>
+                        <th>Tahun</th>
+                        <th>Gaji Bersih</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="slipGajiTableBody">
+                    <tr>
+                        <td>1</td>
+                        <td>EMP001</td>
+                        <td>Achmad Febry</td>
+                        <td>Mei</td>
+                        <td>2023</td>
+                        <td>Rp 5,000,000</td>
+                        <td><button class="btn btn-info">Lihat</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>EMP002</td>
+                        <td>Yovan Fiqri</td>
+                        <td>Mei</td>
+                        <td>2023</td>
+                        <td>Rp 4,800,000</td>
+                        <td><button class="btn btn-info">Lihat</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>EMP003</td>
+                        <td>Siti Amalia</td>
+                        <td>Mei</td>
+                        <td>2023</td>
+                        <td>Rp 5,200,000</td>
+                        <td><button class="btn btn-info">Lihat</button></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>EMP004</td>
+                        <td>Rizki Kurniawan</td>
+                        <td>Mei</td>
+                        <td>2023</td>
+                        <td>Rp 4,750,000</td>
+                        <td><button class="btn btn-info">Lihat</button></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>EMP005</td>
+                        <td>Ayu Permatasari</td>
+                        <td>Mei</td>
+                        <td>2023</td>
+                        <td>Rp 5,100,000</td>
+                        <td><button class="btn btn-info">Lihat</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+         <!-- Cetak Laporan Section -->
+         <div id="cetak-laporan-section" class="cetak-laporan-section" style="display: none;">
+            <h3>Cetak Laporan</h3>
+            <p>Silakan pilih jenis laporan yang ingin dicetak:</p>
+            <div class="mb-3">
+                <label for="laporanType" class="form-label">Jenis Laporan</label>
+                <select class="form-select" id="laporanType">
+                    <option value="" disabled selected>Pilih Jenis Laporan</option>
+                    <option value="gaji">Laporan Gaji</option>
+                    <option value="absensi">Laporan Absensi</option>
+                    <option value="izin">Laporan Izin</option>
+                    <option value="lembur">Laporan Lembur</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" id="printReportButton">Cetak Laporan</button>
+        </div>
+
+    <!-- Modal for Adding Employee -->
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEmployeeModalLabel">Tambah Karyawan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="employeeForm">
+                        <div class="mb-3">
+                            <label for="employeeCode" class="form-label">Kode Karyawan</label>
+                            <input type="text" class="form-control" id="employeeCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="employeeName" class="form-label">Nama Karyawan</label>
+                            <input type="text" class="form-control" id="employeeName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="employeeEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="employeeEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="employeeAddress" class="form-label">Alamat</label>
+                            <input type="text" class="form-control" id="employeeAddress" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="employeePosition" class="form-label">Jabatan</label>
+                            <select class="form-select" id="employeePosition" required>
+                                <option value="" disabled selected>Pilih Jabatan</option>
+                                <!-- Options will be populated here -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="saveEmployeeButton">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Izin -->
+    <div id="addIzinModal" class="modal fade" tabindex="-1" aria-labelledby="addIzinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addIzinModalLabel">Tambah Izin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahIzin">
+                        <div class="mb-3">
+                            <label for="kodeKaryawanIzin" class="form-label">Kode Karyawan</label>
+                            <input type="text" id="kodeKaryawanIzin" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="namaKaryawanIzin" class="form-label">Nama Karyawan</label>
+                            <input type="text" id="namaKaryawanIzin" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalIzin" class="form-label">Tanggal Izin</label>
+                            <input type="date" id="tanggalIzin" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alasanIzin" class="form-label">Alasan</label>
+                            <input type="text" id="alasanIzin" class="form-control" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="tambahDataIzin()">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Tambah Absensi -->
+    <div id="addAbsensiModal" class="modal fade" tabindex="-1" aria-labelledby="addAbsensiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAbsensiModalLabel">Tambah Data Absensi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahAbsensi">
+                        <div class="mb-3">
+                            <label for="namaKaryawanAbsen" class="form-label">Nama Karyawan:</label>
+                            <input type="text" id="namaKaryawanAbsen" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalAbsen" class="form-label">Tanggal:</label>
+                            <input type="date" id="tanggalAbsen" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lokasiAbsen" class="form-label">Lokasi Absen:</label>
+                            <input type="text" id="lokasiAbsen" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jamMasuk" class="form-label">Jam Masuk:</label>
+                            <input type="time" id="jamMasuk" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jamKeluar" class="form-label">Jam Keluar:</label>
+                            <input type="time" id="jamKeluar" class="form-control" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="tambahDataAbsensi()">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Lembur -->
+    <div id="addLemburModal" class="modal fade" tabindex="-1" aria-labelledby="addLemburModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLemburModalLabel">Tambah Lembur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahLembur">
+                        <div class="mb-3">
+                            <label for="kodeKaryawanLembur" class="form-label">Kode Karyawan</label>
+                            <input type="text" id="kodeKaryawanLembur" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="namaKaryawanLembur" class="form-label">Nama Karyawan</label>
+                            <input type="text" id="namaKaryawanLembur" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalLembur" class="form-label">Tanggal Lembur</label>
+                            <input type="date" id="tanggalLembur" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jamMulaiLembur" class="form-label">Jam Mulai</label>
+                            <input type="time" id="jamMulaiLembur" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jamSelesaiLembur" class="form-label">Jam Selesai</label>
+                            <input type="time" id="jamSelesaiLembur" class="form-control" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="tambahDataLembur()">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal for Adding Jabatan -->
+    <div class="modal fade" id="addJabatanModal" tabindex="-1" aria-labelledby="addJabatanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addJabatanModalLabel">Tambah Jabatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="jabatanForm">
+                        <div class="mb-3">
+                            <label for="jabatanCode" class="form-label">Kode Jabatan</label>
+                            <input type="text" class="form-control" id="jabatanCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jabatanName" class="form-label">Nama Jabatan</label>
+                            <input type="text" class="form-control" id="jabatanName" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="saveJabatanButton">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Divisi -->
+    <div class="modal fade" id="addDivisiModal" tabindex="-1" aria-labelledby="addDivisiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDivisiModalLabel">Tambah Divisi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="divisiForm">
+                        <div class="mb-3">
+                            <label for="divisiCode" class="form-label">Kode Divisi</label>
+                            <input type="text" class="form-control" id="divisiCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="divisiName" class="form-label">Nama Divisi</label>
+                            <input type="text" class="form-control" id="divisiName" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="saveDivisiButton">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<script>
+
+    let employees = JSON.parse(localStorage.getItem('employees')) || [];
+    let jabatanList = JSON.parse(localStorage.getItem('jabatanList')) || [];
+    let divisiList = JSON.parse(localStorage.getItem('divisiList')) || [];
+    let izinCounter = 1; // Mulai dari 1 untuk data izin
+    let absensiCounter = 1; // Mulai dari 3 karena ada dua data awal
+    let lemburCounter = 1;
+
+
+    // UNTUK MENCETAK LAPORAN MENJADI PDF
+    document.getElementById("printReportButton").addEventListener("click", function() {
+        const laporanType = document.getElementById("laporanType").value;
+        
+        if (laporanType) {
+            printReport(laporanType);
+        } else {
+            alert("Pilih jenis laporan yang tersedia.");
+        }
+    });
+    
+    function printReport(type) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+    
+        if (type === "gaji") {
+            doc.setFontSize(16);
+            doc.text("Laporan Slip Gaji Karyawan", 10, 10);
+            
+            const rows = Array.from(document.querySelectorAll("#slipGajiTable tbody tr")).map(row => {
+                return Array.from(row.children).map(cell => cell.innerText);
+            });
+            
+            let y = 20;
+            rows.forEach((row, index) => {
+                const rowText = row.join("    ");
+                doc.text(rowText, 10, y + (index * 10));
+            });
+    
+        } else if (type === "absensi") {
+            doc.setFontSize(16);
+            doc.text("Laporan Absensi Karyawan", 10, 10);
+            
+            const rows = Array.from(document.querySelectorAll("#absensiTable tbody tr")).map(row => {
+                return Array.from(row.children).map(cell => cell.innerText);
+            });
+            
+            let y = 20;
+            rows.forEach((row, index) => {
+                const rowText = row.join("    ");
+                doc.text(rowText, 10, y + (index * 10));
+            });
+    
+        } else if (type === "izin") {
+            doc.setFontSize(16);
+            doc.text("Laporan Izin Karyawan", 10, 10);
+    
+            const rows = Array.from(document.querySelectorAll("#izinTable tbody tr")).map(row => {
+                return Array.from(row.children).map(cell => cell.innerText);
+            });
+    
+            let y = 20;
+            rows.forEach((row, index) => {
+                const rowText = row.join("    ");
+                doc.text(rowText, 10, y + (index * 10));
+            });
+        } else if (type === "lembur") {
+            doc.setFontSize(16);
+            doc.text("Laporan Lembur Karyawan", 10, 10);
+    
+            const rows = Array.from(document.querySelectorAll("#lemburTable tbody tr")).map(row => {
+                return Array.from(row.children).map(cell => cell.innerText);
+            });
+    
+            let y = 20;
+            rows.forEach((row, index) => {
+                const rowText = row.join("    ");
+                doc.text(rowText, 10, y + (index * 10));
+            });
+        }
+    
+        const fileName = type === "gaji" ? "Laporan_Slip_Gaji.pdf" : 
+                         type === "absensi" ? "Laporan_Absensi.pdf" : 
+                         type === "izin" ? "Laporan_Izin.pdf" : 
+                         "Laporan_Lembur.pdf";
+        doc.save(fileName);
+    }
+
+
+
+// Fungsi untuk menambah data lembur ke tabel
+
+function tambahDataLembur() {
+    const kodeKaryawanLembur = document.getElementById("kodeKaryawanLembur").value;
+    const namaKaryawanLembur = document.getElementById("namaKaryawanLembur").value;
+    const tanggalLembur = document.getElementById("tanggalLembur").value;
+    const jamMulaiLembur = document.getElementById("jamMulaiLembur").value;
+    const jamSelesaiLembur = document.getElementById("jamSelesaiLembur").value;
+
+    if (!kodeKaryawanLembur || !namaKaryawanLembur || !tanggalLembur || !jamMulaiLembur || !jamSelesaiLembur) {
+        alert("Semua data harus diisi!");
+        return;
+    }
+
+    const lemburTableBody = document.getElementById("lemburTableBody");
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${lemburCounter++}</td>
+        <td>${kodeKaryawanLembur}</td>
+        <td>${namaKaryawanLembur}</td>
+        <td>${tanggalLembur}</td>
+        <td>${jamMulaiLembur}</td>
+        <td>${jamSelesaiLembur}</td>
+        <td><button class="btn btn-success" onclick="konfirmasiLembur(this, '${kodeKaryawanLembur}')">Konfirmasi</button></td>
+    `;
+    lemburTableBody.appendChild(row);
+
+    saveLemburDataToLocalStorage(kodeKaryawanLembur, namaKaryawanLembur, tanggalLembur, jamMulaiLembur, jamSelesaiLembur);
+    updatePendingOvertimeCount();
+    document.getElementById("formTambahLembur").reset();
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addLemburModal'));
+    modal.hide();
+}
+
+function updatePendingOvertimeCount() {
+    const jumlahLembur = document.querySelector("#lemburTableBody").children.length;
+    document.getElementById("pendingOvertime").textContent = jumlahLembur;
+}
+
+function saveLemburDataToLocalStorage(kode, nama, tanggal, jamMulai, jamSelesai) {
+    const lemburList = JSON.parse(localStorage.getItem('lemburList')) || [];
+    lemburList.push({ kode, nama, tanggal, jamMulai, jamSelesai });
+    localStorage.setItem('lemburList', JSON.stringify(lemburList));
+}
+
+function loadLemburData() {
+    const lemburList = JSON.parse(localStorage.getItem('lemburList')) || [];
+    const lemburTableBody = document.getElementById("lemburTableBody");
+
+    lemburList.forEach((lembur, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${lembur.kode}</td>
+            <td>${lembur.nama}</td>
+            <td>${lembur.tanggal}</td>
+            <td>${lembur.jamMulai}</td>
+            <td>${lembur.jamSelesai}</td>
+            <td><button class="btn btn-success" onclick="konfirmasiLembur(this, '${lembur.kode}')">Konfirmasi</button></td>
+        `;
+        lemburTableBody.appendChild(row);
+    });
+    updatePendingOvertimeCount();
+}
+
+// Function to confirm lembur entry and remove it from local storage
+function konfirmasiLembur(button, kode) {
+    const row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    removeLemburDataFromLocalStorage(kode);
+    updatePendingOvertimeCount();
+}
+
+// Function to remove lembur data from local storage
+function removeLemburDataFromLocalStorage(kode) {
+    let lemburList = JSON.parse(localStorage.getItem('lemburList')) || [];
+    lemburList = lemburList.filter(lembur => lembur.kode !== kode);
+    localStorage.setItem('lemburList', JSON.stringify(lemburList));
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadLemburData();
+});
+
+
+// Function to set today's date
+function setTodayDate() {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById("todayDate").textContent = today.toLocaleDateString('id-ID', options);
+}
+
+// Function to add attendance data
+function tambahDataAbsensi() {
+    const namaKaryawanAbsen = document.getElementById("namaKaryawanAbsen").value;
+    const tanggalAbsen = document.getElementById("tanggalAbsen").value;
+    const lokasiAbsen = document.getElementById("lokasiAbsen").value;
+    const jamMasuk = document.getElementById("jamMasuk").value;
+    const jamKeluar = document.getElementById("jamKeluar").value;
+
+    if (!namaKaryawanAbsen || !tanggalAbsen || !lokasiAbsen || !jamMasuk || !jamKeluar) {
+        alert("Semua data harus diisi!");
+        return;
+    }
+
+    const absensiEntry = {
+        id: absensiCounter++,
+        nama: namaKaryawanAbsen,
+        tanggal: tanggalAbsen,
+        lokasi: lokasiAbsen,
+        jamMasuk: jamMasuk,
+        jamKeluar: jamKeluar
+    };
+
+    saveAbsensiToLocalStorage(absensiEntry);
+    appendAbsensiRow(absensiEntry);
+    updateTodayAttendanceCount();
+    document.getElementById("formTambahAbsensi").reset();
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addAbsensiModal'));
+    modal.hide();
+}
+
+// Function to append a row to the attendance table
+function appendAbsensiRow(entry) {
+    const absensiTableBody = document.querySelector("#absensi-section tbody");
+    const row = document.createElement("tr");
+    row.setAttribute("data-id", entry.id);
+    row.innerHTML = `
+        <td>${entry.id}</td>
+        <td>${entry.nama}</td>
+        <td>${entry.tanggal}</td>
+        <td>${entry.lokasi}</td>
+        <td>${entry.jamMasuk}</td>
+        <td>${entry.jamKeluar}</td>
+        <td><button class="btn btn-danger" onclick="hapusAbsensi(${entry.id})">Hapus</button></td>
+    `;
+    absensiTableBody.appendChild(row);
+}
+
+// Function to delete attendance entry
+function hapusAbsensi(id) {
+    const row = document.querySelector(`#absensi-section tbody tr[data-id="${id}"]`);
+    if (row) row.remove();
+
+    // Remove from local storage
+    removeAbsensiFromLocalStorage(id);
+    updateTodayAttendanceCount();
+}
+
+// Function to update the count of today's attendance
+function updateTodayAttendanceCount() {
+    const jumlahAbsen = document.querySelector("#absensi-section tbody").children.length;
+    document.getElementById("todayAttendance").textContent = jumlahAbsen;
+
+    localStorage.setItem('todayAttendance', jumlahAbsen);
+}
+
+// Function to save attendance data to local storage
+function saveAbsensiToLocalStorage(entry) {
+    let absensiData = JSON.parse(localStorage.getItem('absensiData')) || [];
+    absensiData.push(entry);
+    localStorage.setItem('absensiData', JSON.stringify(absensiData));
+}
+
+// Function to remove attendance data from local storage
+function removeAbsensiFromLocalStorage(id) {
+    let absensiData = JSON.parse(localStorage.getItem('absensiData')) || [];
+    absensiData = absensiData.filter(entry => entry.id !== id);
+    localStorage.setItem('absensiData', JSON.stringify(absensiData));
+}
+
+// Function to load attendance data from local storage
+function loadAbsensiData() {
+    const absensiData = JSON.parse(localStorage.getItem('absensiData')) || [];
+    absensiData.forEach(entry => {
+        appendAbsensiRow(entry);
+        absensiCounter = Math.max(absensiCounter, entry.id + 1);
+    });
+}
+
+// Set up event listeners on page load
+document.addEventListener("DOMContentLoaded", function() {
+    setTodayDate();
+    loadAbsensiData();
+    updateTodayAttendanceCount();
+});
+
+// Function to load today's attendance count from local storage
+function loadTodayAttendanceCount() {
+    const count = localStorage.getItem('todayAttendance') || 0; // Get count from local storage or set to 0
+    document.getElementById("todayAttendance").textContent = count;
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadIzinData(); // Load existing leave data on page load
+    updatePendingLeavesCount(); // Update pending leaves count from local storage
+});
+
+// Function to add leave data
+function tambahDataIzin() {
+    const kodeKaryawanIzin = document.getElementById("kodeKaryawanIzin").value;
+    const namaKaryawanIzin = document.getElementById("namaKaryawanIzin").value;
+    const tanggalIzin = document.getElementById("tanggalIzin").value;
+    const alasanIzin = document.getElementById("alasanIzin").value;
+
+    if (!kodeKaryawanIzin || !namaKaryawanIzin || !tanggalIzin || !alasanIzin) {
+        alert("Semua data harus diisi!");
+        return;
+    }
+
+    const izinEntry = {
+        counter: izinCounter++,
+        kodeKaryawan: kodeKaryawanIzin,
+        namaKaryawan: namaKaryawanIzin,
+        tanggal: tanggalIzin,
+        alasan: alasanIzin
+    };
+
+    // Save leave entry to local storage
+    saveIzinToLocalStorage(izinEntry);
+
+    // Append the new row to the leave table
+    appendIzinRow(izinEntry);
+
+    // Update count of pending leaves
+    updatePendingLeavesCount();
+
+    // Reset the form
+    document.getElementById("formTambahIzin").reset();
+
+    // Close the modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addIzinModal'));
+    modal.hide();
+}
+
+// Function to append a row to the leave table
+function appendIzinRow(entry) {
+    const izinTableBody = document.getElementById("izinTableBody");
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${entry.counter}</td>
+        <td>${entry.kodeKaryawan}</td>
+        <td>${entry.namaKaryawan}</td>
+        <td>${entry.tanggal}</td>
+        <td>${entry.alasan}</td>
+        <td><button class="btn btn-success" onclick="konfirmasiIzin(this)">Konfirmasi</button></td>
+    `;
+    izinTableBody.appendChild(row);
+}
+
+// Function to update the count of pending leaves
+function updatePendingLeavesCount() {
+    const jumlahIzin = document.querySelector("#izinTableBody").children.length;
+    document.getElementById("pendingLeaves").textContent = jumlahIzin;
+
+    // Save pending leaves count to local storage
+    localStorage.setItem('pendingLeaves', jumlahIzin);
+}
+
+// Function to save leave data to local storage
+function saveIzinToLocalStorage(entry) {
+    let izinData = JSON.parse(localStorage.getItem('izinData')) || [];
+    izinData.push(entry);
+    localStorage.setItem('izinData', JSON.stringify(izinData));
+}
+
+// Function to load leave data from local storage
+function loadIzinData() {
+    const izinData = JSON.parse(localStorage.getItem('izinData')) || [];
+    izinData.forEach(entry => {
+        appendIzinRow(entry);
+        izinCounter = Math.max(izinCounter, entry.counter + 1); // Update counter based on existing entries
+    });
+
+    // Set pending leaves count from local storage
+    const savedPendingLeaves = localStorage.getItem('pendingLeaves');
+    document.getElementById("pendingLeaves").textContent = savedPendingLeaves || 0;
+}
+
+// Function to confirm leave request
+function konfirmasiIzin(button) {
+    const row = button.parentElement.parentElement;
+    const kodeKaryawan = row.cells[1].textContent; // Get the employee code from the row
+
+    // Remove the row from the table
+    row.remove();
+
+    // Update pending leaves count
+    updatePendingLeavesCount();
+
+    // Load current leave data to update local storage
+    updateLocalStorageAfterConfirmation(kodeKaryawan);
+}
+
+// Function to update local storage after confirming a leave request
+function updateLocalStorageAfterConfirmation(kodeKaryawan) {
+    let izinData = JSON.parse(localStorage.getItem('izinData')) || [];
+    izinData = izinData.filter(entry => entry.kodeKaryawan !== kodeKaryawan); // Remove confirmed leave
+    localStorage.setItem('izinData', JSON.stringify(izinData));
+}
+
+        function saveToLocalStorage() {
+            localStorage.setItem('employees', JSON.stringify(employees));
+            localStorage.setItem('jabatanList', JSON.stringify(jabatanList));
+            localStorage.setItem('divisiList', JSON.stringify(divisiList));
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.content > div').forEach(div => {
+                div.style.display = 'none';
+            });
+            document.getElementById(section).style.display = 'block';
+        }
+
+        function updateEmployeeCount() {
+            document.getElementById('employeeCount').innerText = employees.length;
+        }
+
+        document.getElementById('saveJabatanButton').addEventListener('click', function() {
+            const jabatanCode = document.getElementById('jabatanCode').value;
+            const jabatanName = document.getElementById('jabatanName').value;
+
+            jabatanList.push({ kode: jabatanCode, nama: jabatanName });
+            updateJabatanTable();
+            document.getElementById('jabatanForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addJabatanModal'));
+            modal.hide();
+            loadJabatan();
+            saveToLocalStorage();
+        });
+
+        function updateJabatanTable() {
+            const jabatanTableBody = document.getElementById('jabatanTableBody');
+            jabatanTableBody.innerHTML = '';
+            jabatanList.forEach((jabatan, index) => {
+                jabatanTableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${jabatan.kode}</td>
+                        <td>${jabatan.nama}</td>
+                        <td><button class="btn btn-danger" onclick="deleteJabatan(${index})">Hapus</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function searchJabatan() {
+            const input = document.getElementById('jabatanSearchInput').value.toLowerCase();
+            const tableBody = document.getElementById('jabatanTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+        
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+        
+                // Loop through each cell in the row
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        // Check if the cell text matches the input
+                        if (cellText.toLowerCase().includes(input)) {
+                            found = true; // Found a match
+                            break;
+                        }
+                    }
+                }
+        
+                // Show or hide the row based on the search
+                rows[i].style.display = found ? "" : "none";
+            }
+        }
+
+        function deleteJabatan(index) {
+            jabatanList.splice(index, 1);
+            updateJabatanTable();
+            saveToLocalStorage();
+        }
+
+        function loadJabatan() {
+            const positionSelect = document.getElementById('employeePosition');
+            positionSelect.innerHTML = '<option value="" disabled selected>Pilih Jabatan</option>';
+            jabatanList.forEach(jabatan => {
+                positionSelect.innerHTML += `<option value="${jabatan.kode}">${jabatan.nama}</option>`;
+            });
+        }
+
+        document.getElementById('saveEmployeeButton').addEventListener('click', function() {
+            const code = document.getElementById('employeeCode').value;
+            const name = document.getElementById('employeeName').value;
+            const email = document.getElementById('employeeEmail').value;
+            const address = document.getElementById('employeeAddress').value;
+            const position = document.getElementById('employeePosition').value;
+
+            const newEmployee = { code, name, email, address, position };
+            employees.push(newEmployee);
+            updateEmployeeTable();
+            document.getElementById('employeeForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal'));
+            modal.hide();
+            saveToLocalStorage();
+            updateEmployeeCount();
+        });
+
+        function updateEmployeeTable() {
+            const employeeTableBody = document.getElementById('employeeTableBody');
+            employeeTableBody.innerHTML = '';
+            employees.forEach((employee, index) => {
+                employeeTableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${employee.code}</td>
+                        <td>${employee.name}</td>
+                        <td>${employee.email}</td>
+                        <td>${employee.address}</td>
+                        <td>${jabatanList.find(j => j.kode === employee.position)?.nama || 'N/A'}</td>
+                        <td><button class="btn btn-danger" onclick="deleteEmployee(${index})">Hapus</button></td>
+                    </tr>
+                `;
+            });
+            updateEmployeeCount();
+        }
+
+        function searchEmployees() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const tableBody = document.getElementById('employeeTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        if (cellText.toLowerCase().includes(input)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                rows[i].style.display = found ? "" : "none";
+            }
+        }
+
+        function deleteEmployee(index) {
+            employees.splice(index, 1);
+            updateEmployeeTable();
+            saveToLocalStorage();
+            updateEmployeeCount();
+        }
+
+        document.getElementById('saveDivisiButton').addEventListener('click', function() {
+            const divisiCode = document.getElementById('divisiCode').value;
+            const divisiName = document.getElementById('divisiName').value;
+
+            divisiList.push({ kode: divisiCode, nama: divisiName });
+            updateDivisiTable();
+            document.getElementById('divisiForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addDivisiModal'));
+            modal.hide();
+            saveToLocalStorage();
+        });
+
+        function updateDivisiTable() {
+            const divisiTableBody = document.getElementById('divisiTableBody');
+            divisiTableBody.innerHTML = '';
+            divisiList.forEach((divisi, index) => {
+                divisiTableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${divisi.kode}</td>
+                        <td>${divisi.nama}</td>
+                        <td><button class="btn btn-danger" onclick="deleteDivisi(${index})">Hapus</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Function to search divisi
+    function searchDivisi() {
+    const input = document.getElementById('divisiSearchInput').value.toLowerCase();
+    const tableBody = document.getElementById('divisiTableBody');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        let found = false;
+
+        // Loop through each cell in the row
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j]) {
+                const cellText = cells[j].textContent || cells[j].innerText;
+                // Check if the cell text matches the input
+                if (cellText.toLowerCase().includes(input)) {
+                    found = true; // Found a match
+                    break;
+                }
+            }
+        }
+
+        // Show or hide the row based on the search
+        rows[i].style.display = found ? "" : "none";
+    }
+}
+
+        function deleteDivisi(index) {
+            divisiList.splice(index, 1);
+            updateDivisiTable();
+            saveToLocalStorage();
+        }
+
+        document.getElementById('todayDate').innerText = new Date().toLocaleDateString();
+        showSection('dashboard');
+
+        // Load initial data from localStorage
+        updateEmployeeTable();
+        updateJabatanTable();
+        loadJabatan();
+        updateDivisiTable();
+        updateEmployeeCount();
+</script>
+
+
+</body>
+</html>
